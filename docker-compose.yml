@@ -1,0 +1,19 @@
+version: "3"
+services:
+  trusttunnel-rust-server:
+    build: .
+    container_name: trusttunnel-rust-server
+    restart: always
+    ports:
+      - "8443:443/udp"
+      - "8443:443/tcp"
+    volumes:
+      - ./certs:/app/certs
+    environment:
+      - USE_SELF_SIGNED=true # 开启自动生成自签名证书
+      - DOMAIN_OR_IP=192.168.31.244 # 可以是你的内网 IP，或者是公网域名如 vpn.yourdomain.com
+      # - USE_SELF_SIGNED=false           # 关闭自签名，强制读取外部证书
+      # - DOMAIN_OR_IP=vpn.yourdomain.com # 换成你证书实际绑定的真实公网域名
+      - TUNNEL_LISTEN=0.0.0.0:443
+      - TUNNEL_USER=admin_user # 你的客户端登录用户名
+      - TUNNEL_PASS=SecurePassword123! # 你的客户端登录密码
